@@ -12,7 +12,7 @@ defmodule P1Meter.Context do
 
   defp default() do
     [
-      pid: nil,
+      conn: nil,
       transport: transport(),
       timeout: @default_timeout
     ]

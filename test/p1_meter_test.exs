@@ -5,5 +5,4 @@ defmodule P1MeterTest do
   test "stream!/1" do
     assert :ok
   end
-
 end

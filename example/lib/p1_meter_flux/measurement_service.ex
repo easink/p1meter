@@ -1,30 +1,35 @@
-defmodule P1Meter.Example.MeasurementService do
+defmodule P1MeterFlux.MeasurementService do
   @moduledoc false
 
   use Task
 
   alias P1Meter.Context
-  alias P1Meter.Example.Influx
+  alias P1MeterFlux.Influx
 
   require Logger
 
   def start_link(_opts) do
     host = host()
     port = port()
+    Logger.info("Collect data from #{:inet.ntoa host}:#{port}")
     Task.start_link(fn -> measure(host, port) end)
   end
 
   def measure(host, port) do
     {:ok, socket} = P1Meter.Transport.TCPClient.connect(host, port)
-    # context = %Context{transport: P1Meter.Transport.TCPClient, pid: socket}
+    # context = %Context{transport: P1Meter.Transport.TCPClient, conn: socket}
 
-    Context.new(pid: socket, transport: transport())
+    Context.new(conn: socket, transport: transport())
     |> P1Meter.stream()
     |> Enum.map(fn frame ->
       frame
       |> Influx.Measurement.from_frame()
-      |> Influx.Connection.write()
+      |> influx_write!()
     end)
+  end
+
+  defp influx_write!(frame) do
+    :ok = Influx.Connection.write(frame)
   end
 
   defp host() do
@@ -43,6 +48,6 @@ defmodule P1Meter.Example.MeasurementService do
   end
 
   defp config() do
-    Application.get_env(:p1_meter, __MODULE__, [])
+    Application.get_env(:p1_meter_flux, __MODULE__, [])
   end
 end

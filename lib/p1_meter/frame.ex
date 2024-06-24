@@ -5,7 +5,7 @@ defmodule P1Meter.Frame do
 
   alias __MODULE__
   alias P1Meter.Utils
-  alias P1Meter.Parser
+  alias P1Meter.OBIS
   alias P1Meter.Context
 
   require Logger
@@ -90,7 +90,7 @@ defmodule P1Meter.Frame do
 
       %{identification: state.identification}
       |> Frame.new()
-      |> Parser.parse_measurements(state.lines)
+      |> OBIS.parse_measurements(state.lines)
       |> ok()
     end
   end
@@ -114,7 +114,7 @@ defmodule P1Meter.Frame do
 
   defp read_line(ctx) do
     transport = ctx[:transport]
-    transport.read_line(ctx[:pid], ctx[:timeout])
+    transport.read_line(ctx[:conn], ctx[:timeout])
   end
 
   defp ok(frame), do: {:ok, frame}

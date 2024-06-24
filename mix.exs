@@ -11,30 +11,26 @@ defmodule P1Meter.MixProject do
       package: package(),
       deps: deps(),
       name: "p1-meter",
-      source_url: "https://github.com/easink/p1-meter",
+      source_url: "https://github.com/easink/p1-meter"
     ]
   end
 
   # Run "mix help compile.app" to learn about applications.
   def application do
-    [
-      extra_applications: [:logger],
-      mod: {P1Meter.Example.Application, []}
-    ]
+    []
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       # {:mox, "~> 1.0", only: :test},
+      {:nimble_parsec, "~> 1.4"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      # example deps
-      {:instream, "~> 2.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
-    defp description() do
+  defp description() do
     "Library for IEC62056-21 mode D. Used in P1/HAN ports."
   end
 
